@@ -8,7 +8,6 @@ import {
     PointLight,
     LoadingManager,
     TextureLoader,
-    WebGLCubeRenderTarget,
     Clock
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -25,7 +24,7 @@ import KeyboardSpectator from "./KeyboardSpectator";
 import PlayerAnimation from "./PlayerAnimation";
 import Config from './Config';
 import Collision from './Collision';
-import skyboxTex from './assets/textures/warszawa.jpg';
+import SkyBox from './SkyBox';
 
 
 export default class Main {
@@ -47,21 +46,14 @@ export default class Main {
 
         this.manager = new LoadingManager();
 
-        // const controls = new OrbitControls(this.camera, this.renderer.domElement);
         var axes = new AxesHelper(1000);
         this.scene.add(axes);
         const gridHelper = new GridHelper(100, 10);
         this.scene.add(gridHelper);
 
-        const loader = new TextureLoader();
-        const texture = loader.load(
-            // 'https://threejsfundamentals.org/threejs/resources/images/equirectangularmaps/tears_of_steel_bridge_2k.jpg',
-            skyboxTex,
-            () => {
-                const rt = new WebGLCubeRenderTarget(texture.image.height);
-                rt.fromEquirectangularTexture(this.renderer.threeRenderer, texture);
-                this.scene.background = rt.texture;
-            });
+
+
+        this.skybox = new SkyBox(this.scene, this.renderer);
 
         // światło ogólne
         // let light = new PointLight(0xffffff, 0.2, 10000, 1000);

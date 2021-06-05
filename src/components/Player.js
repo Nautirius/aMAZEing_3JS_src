@@ -1,7 +1,6 @@
 import { MD2Loader } from 'three/examples/jsm/loaders/MD2Loader.js';
 import { Mesh, TextureLoader, MeshPhongMaterial, SpotLight, Box3, Object3D } from "three";
 import marioTex from './assets/models/mario/mario2.jpg';
-// import billTex from './assets/billgates/billywork.jpg';
 
 export default class Player {
     constructor(scene, manager, x, z) {
@@ -53,7 +52,6 @@ export default class Player {
                 // this.light.target = this.lightDirection;
 
                 this.scene.add(this.mesh);
-
             },
         );
     }
