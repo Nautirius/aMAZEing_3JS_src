@@ -8,7 +8,7 @@ import Ico from './Ico';
 import Wall from './Wall';
 import Floor from './Floor';
 import Player from "./Player";
-import Keyboard from "./Keyboard";
+import Keyboard from "./KeyboardPlayer";
 import PlayerAnimation from "./PlayerAnimation";
 import Config from './Config';
 

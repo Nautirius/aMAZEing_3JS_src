@@ -20,7 +20,8 @@ import Ico from './Ico';
 import Wall from './Wall';
 import Floor from './Floor';
 import Player from "./Player";
-import Keyboard from "./Keyboard";
+import KeyboardPlayer from "./KeyboardPlayer";
+import KeyboardSpectator from "./KeyboardSpectator";
 import PlayerAnimation from "./PlayerAnimation";
 import Config from './Config';
 import Collision from './Collision';
@@ -77,13 +78,13 @@ export default class Main {
 
         this.player = null
 
-        const socket = new WebSocket('ws://localhost:3000');
-        socket.addEventListener('open', function (event) {
+        this.socket = new WebSocket('ws://localhost:3000');
+        this.socket.addEventListener('open', function (event) {
             console.log('Connected to WS Server');
         });
-        let playerId;
 
         this.walls = [];
+
 
         this.gameData = fetch('http://localhost:3000/loadLevel', {
             method: "POST",
@@ -96,8 +97,8 @@ export default class Main {
             .then(result => {
                 console.log(result)
 
-                playerId = result.playerId;
-                socket.send(JSON.stringify({ action: "set id", playerId: playerId }))
+                this.playerId = result.playerId;
+                this.socket.send(JSON.stringify({ action: "set id", playerId: this.playerId }))
 
                 result.levelData.walls.forEach(wall => {
                     let newWall = new Wall(this.scene, 100, 100, wall.x, 0, wall.z);
@@ -137,7 +138,12 @@ export default class Main {
 
             this.playerAnimation.playAnim("stand")
 
-            this.keyboard = new Keyboard(window, this.playerAnimation, this.player.mesh);
+            if (this.role === "player") {
+                this.keyboard = new KeyboardPlayer(window, this.playerAnimation, this.player.mesh, this.socket, this.playerId);
+            } else {
+                this.keyboard = new KeyboardSpectator(window, this.playerAnimation, this.player.mesh, this.socket);
+            }
+
 
             // this.helper = new BoxHelper(this.model.mesh);
             // this.scene.add(this.helper)
