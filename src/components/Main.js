@@ -8,7 +8,9 @@ import {
     PointLight,
     LoadingManager,
     TextureLoader,
-    Clock
+    Clock,
+    BoxHelper,
+    Box3
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
@@ -25,6 +27,7 @@ import PlayerAnimation from "./PlayerAnimation";
 import Config from './Config';
 import Collision from './Collision';
 import SkyBox from './SkyBox';
+import SE from './SE'
 
 
 export default class Main {
@@ -77,6 +80,18 @@ export default class Main {
 
         this.walls = [];
 
+        this.socket.addEventListener('message', event => {
+            console.log('Message from server ', event.data);
+            if(event.data[0] == "{"){
+                let data = JSON.parse(event.data);
+                if (data.action === "end") {
+                    console.log("jaja")
+                    document.body.innerText=""
+                    document.location.href = 'http://localhost:3000/endPrint'
+                }
+            }
+        }, false);
+
 
         this.gameData = fetch('http://localhost:3000/loadLevel', {
             method: "POST",
@@ -91,6 +106,12 @@ export default class Main {
 
                 this.playerId = result.playerId;
                 this.socket.send(JSON.stringify({ action: "set id", playerId: this.playerId }))
+
+                // this.start = new SE(this.scene, 100, 100, result.levelData.start.x, result.levelData.start.y, result.levelData.start.z)
+                this.end = new SE(this.scene, 100, 100, result.levelData.end.x, result.levelData.end.y, result.levelData.end.z)
+                // this.scene.add(new BoxHelper(this.start.mesh))
+                this.scene.add(new BoxHelper(this.end.mesh))
+                // // this.end = result.levelData.end
 
                 result.levelData.walls.forEach(wall => {
                     let newWall = new Wall(this.scene, 100, 100, wall.x, 0, wall.z);
@@ -126,6 +147,7 @@ export default class Main {
 
             this.playerCollision = new Collision(this.player, this.walls)
 
+
             this.playerAnimation = new PlayerAnimation(this.player.mesh)
 
             this.playerAnimation.playAnim("stand")
@@ -150,6 +172,8 @@ export default class Main {
         this.render();
     }
 
+    
+
     render() {
         this.stats.begin()
         // this.ico.update()
@@ -160,6 +184,7 @@ export default class Main {
         this.renderer.render(this.scene, this.camera.threeCamera);
 
         if (this.isLoaded) {
+            this.end.meta(this.player, this.socket, this.playerId)
 
             if (Config.rotateLeft) {
                 this.player.mesh.rotation.y += 0.05
@@ -186,7 +211,7 @@ export default class Main {
 
             if (this.role === "player") {
 
-                const camVect = new Vector3(-200, 50, 0)
+                const camVect = new Vector3(-20, 10, 0)
                 const camPos = camVect.applyMatrix4(this.player.mesh.matrixWorld);
 
                 this.camera.threeCamera.position.x = camPos.x
