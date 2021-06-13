@@ -32,7 +32,12 @@ export default class KeyboardSpectator {
         this.socket.addEventListener('message', (event) => {
             let dataJson = JSON.parse(event.data);
             if (dataJson.action === "update position") {
-                this.modelMesh.position.set(dataJson.data.x, dataJson.data.y, dataJson.data.z);
+                let newPos = dataJson.data.pos;
+                let newRot = dataJson.data.rot;
+                this.modelMesh.position.set(newPos.x, newPos.y, newPos.z);
+                this.modelMesh.rotation.set(newRot._x, newRot._y, newRot._z);
+                // this.modelMesh.rotateX(newRot.x)
+                // this.modelMesh.rotateZ(newRot.z)
             }
         })
     }

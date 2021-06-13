@@ -133,12 +133,12 @@ export default class Main {
             if (this.role === "player") {
                 this.keyboard = new KeyboardPlayer(window, this.playerAnimation, this.player.mesh, this.socket, this.playerId);
                 setInterval(() => {
-                    this.socket.send(JSON.stringify({ action: "update position", data: this.player.mesh.position, playerId: this.playerId }));
+                    this.socket.send(JSON.stringify({ action: "update position", data: { pos: this.player.mesh.position, rot: this.player.mesh.rotation }, playerId: this.playerId }));
                 }, 1000);
             } else {
                 this.keyboard = new KeyboardSpectator(window, this.playerAnimation, this.player.mesh, this.socket);
+                // let ok = 1
             }
-
 
             // this.helper = new BoxHelper(this.model.mesh);
             // this.scene.add(this.helper)
@@ -176,6 +176,7 @@ export default class Main {
                 this.playerCollision.checkCollision(-3);
             }
 
+            // this.player.mesh.rotation
 
             // this.lightTarget.position.set(this.model.mesh.position)
             // // this.lightTarget.translateZ(100);
