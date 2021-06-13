@@ -28,7 +28,15 @@ export default class KeyboardSpectator {
         }, false);
         // this.domElement.addEventListener('keydown', event => this.onKeyDown(event), false);
         // this.domElement.addEventListener('keyup', event => this.onKeyUp(event), false);
+
+        this.socket.addEventListener('message', function (event) {
+            let dataJson = JSON.parse(event.data);
+            if (dataJson.action === "update position") {
+                this.modelMesh.position.set(dataJson.data);
+            }
+        })
     }
+
 
     onKeyUp(event) {
         switch (event.data) {

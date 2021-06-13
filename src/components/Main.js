@@ -132,6 +132,9 @@ export default class Main {
 
             if (this.role === "player") {
                 this.keyboard = new KeyboardPlayer(window, this.playerAnimation, this.player.mesh, this.socket, this.playerId);
+                setInterval(() => {
+                    this.socket.send(JSON.stringify({ action: "update position", data: this.player.mesh.position, playerId: this.playerId }));
+                }, 1000);
             } else {
                 this.keyboard = new KeyboardSpectator(window, this.playerAnimation, this.player.mesh, this.socket);
             }
