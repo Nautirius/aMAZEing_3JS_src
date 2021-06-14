@@ -10,7 +10,8 @@ import {
     TextureLoader,
     Clock,
     BoxHelper,
-    Box3
+    Box3,
+    AnimationMixer
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
@@ -48,6 +49,8 @@ export default class Main {
         this.clock = new Clock();
 
         this.manager = new LoadingManager();
+
+        
 
         var axes = new AxesHelper(1000);
         this.scene.add(axes);
@@ -126,7 +129,7 @@ export default class Main {
                 }
 
                 this.player = new Player(this.scene, this.manager, result.levelData.start.x, result.levelData.start.z);
-                this.player.load('./assets/models/mario/mario.md2');
+                this.player.load();
                 return result;
             })
             .catch(error => { console.log(error); })
@@ -148,9 +151,20 @@ export default class Main {
             this.playerCollision = new Collision(this.player, this.walls)
 
 
-            this.playerAnimation = new PlayerAnimation(this.player.mesh)
+            // this.playerAnimation = new PlayerAnimation(this.player.model)
+            // console.log(this.playerAnimation)
 
-            this.playerAnimation.playAnim("stand")
+            this.mixer = new AnimationMixer(this.player.mesh)
+
+            // this.player.mesh.animations.forEach( ( clip ) => {
+            //     console.log(clip)
+          
+            //     this.mixer.clipAction( clip ).play();
+              
+            // } );
+            // this.playerAnimation;
+
+            // this.playerAnimation.playAnim("CINEMA_4D_Main")
 
             if (this.role === "player") {
                 this.keyboard = new KeyboardPlayer(window, this.playerAnimation, this.player.mesh, this.socket, this.playerId);
@@ -178,8 +192,11 @@ export default class Main {
         this.stats.begin()
         // this.ico.update()
 
+        // var delta = this.clock.getDelta();
+        // if (this.playerAnimation) this.playerAnimation.update(delta)
         var delta = this.clock.getDelta();
-        if (this.playerAnimation) this.playerAnimation.update(delta)
+  
+        if ( this.mixer ) this.mixer.update( delta );
 
         this.renderer.render(this.scene, this.camera.threeCamera);
 
@@ -193,10 +210,14 @@ export default class Main {
                 this.player.mesh.rotation.y -= 0.05
             }
             if (Config.moveForward) {
+                console.log(this.player.mesh.animations)
+                this.mixer.clipAction(this.player.model.animations[0]).play()
                 // this.player.mesh.translateX(3);
                 this.playerCollision.checkCollision(3);
             }
             if (Config.moveBackward) {
+                this.mixer.clipAction(this.player.model.animations[0]).stop()
+
                 // this.player.mesh.translateX(-3);
                 this.playerCollision.checkCollision(-3);
             }
@@ -211,13 +232,15 @@ export default class Main {
 
             if (this.role === "player") {
 
-                const camVect = new Vector3(-20, 10, 0)
+                const camVect = new Vector3(0, 30, -30)
                 const camPos = camVect.applyMatrix4(this.player.mesh.matrixWorld);
+                const pos = new Vector3(0,10,40)
+                const poss = pos.applyMatrix4(this.player.mesh.matrixWorld)
 
                 this.camera.threeCamera.position.x = camPos.x
                 this.camera.threeCamera.position.y = camPos.y
                 this.camera.threeCamera.position.z = camPos.z
-                this.camera.threeCamera.lookAt(this.player.mesh.position)
+                this.camera.threeCamera.lookAt(poss)
             }
 
 

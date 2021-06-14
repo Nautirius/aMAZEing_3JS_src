@@ -11,7 +11,7 @@ export default class Collision {
 
     }
     checkCollision(distance) {
-        this.model.mesh.translateX(distance);
+        this.model.mesh.translateZ(distance);
         let canMove = true;
         let modelBoundingBox = new Box3;
         modelBoundingBox.setFromCenterAndSize(this.model.mesh.position, new Vector3(20, 100, 20));
@@ -23,7 +23,7 @@ export default class Collision {
             }
         });
         if (!canMove) {
-            this.model.mesh.translateX(distance * -1)
+            this.model.mesh.translateZ(distance * -1)
         }
     }
 }

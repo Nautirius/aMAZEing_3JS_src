@@ -26,7 +26,7 @@ export default class KeyboardPlayer {
         switch (event.keyCode) {
             case KEYS.up:
                 Config.moveForward = false;
-                this.animation.playAnim("stand");
+                // this.animation.playAnim("stand");
                 break;
             case KEYS.left:
                 Config.rotateLeft = false;
@@ -36,7 +36,7 @@ export default class KeyboardPlayer {
                 break;
             case KEYS.down:
                 Config.moveBackward = false;
-                this.animation.playAnim("stand");
+                // this.animation.playAnim("stand");
                 break;
         }
         this.socket.send(JSON.stringify({ action: "del move", data: event.keyCode, playerId: this.playerId }));
@@ -49,7 +49,7 @@ export default class KeyboardPlayer {
                 if (!Config.moveForward) {
                     this.socket.send(JSON.stringify({ action: "set move", data: event.keyCode, playerId: this.playerId }));
                     Config.moveForward = true;
-                    this.animation.playAnim("crwalk");
+                    // this.animation.playAnim("crwalk");
                 }
                 break;
             case KEYS.left:
@@ -68,7 +68,7 @@ export default class KeyboardPlayer {
                 if (!Config.moveBackward) {
                     this.socket.send(JSON.stringify({ action: "set move", data: event.keyCode, playerId: this.playerId }));
                     Config.moveBackward = true;
-                    this.animation.playAnim("crwalk");
+                    // this.animation.playAnim("crwalk");
                 }
                 break;
         }

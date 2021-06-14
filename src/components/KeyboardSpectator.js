@@ -47,7 +47,7 @@ export default class KeyboardSpectator {
         switch (event.data) {
             case KEYS.up:
                 Config.moveForward = false;
-                this.animation.playAnim("stand");
+                // this.animation.playAnim("stand");
                 break;
             case KEYS.left:
                 Config.rotateLeft = false;
@@ -57,7 +57,7 @@ export default class KeyboardSpectator {
                 break;
             case KEYS.down:
                 Config.moveBackward = false;
-                this.animation.playAnim("stand");
+                // this.animation.playAnim("stand");
                 break;
         }
         console.log('onKeyUp', event.data)
@@ -67,7 +67,7 @@ export default class KeyboardSpectator {
         switch (event.data) {
             case KEYS.up:
                 Config.moveForward = true;
-                this.animation.playAnim("crwalk");
+                // this.animation.playAnim("crwalk");
                 break;
             case KEYS.left:
                 Config.rotateLeft = true;
@@ -77,7 +77,7 @@ export default class KeyboardSpectator {
                 break;
             case KEYS.down:
                 Config.moveBackward = true;
-                this.animation.playAnim("crwalk");
+                // this.animation.playAnim("crwalk");
                 break;
         }
         console.log('onKeyDown', event.data)
