@@ -11,7 +11,7 @@ import wallTex from './assets/textures/block/diamond_ore.png';
 
 export default class Wall {
 
-    constructor(scene, size, height, x, y, z) {
+    constructor(scene, size, height, x, y, z, texture = false) {
         console.log("wall")
         this.scene = scene;
         this.geometry = new BoxGeometry(size, height, size);

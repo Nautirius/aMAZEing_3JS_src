@@ -130,7 +130,7 @@ export default class Main {
                     }
 
                     this.player = new Player(this.scene, this.manager, result.levelData.start.x, result.levelData.start.z);
-                    this.player.load();
+                    this.player.load(this.role);
                     return result;
                 })
                 .catch(error => { console.log(error); })
@@ -212,12 +212,16 @@ export default class Main {
             }
             if (Config.moveForward) {
                 console.log(this.player.mesh.animations)
-                this.mixer.clipAction(this.player.model.animations[0]).play()
+                if (this.role === "player") {
+                    this.mixer.clipAction(this.player.model.animations[0]).play()
+                }
                 // this.player.mesh.translateX(3);
                 this.playerCollision.checkCollision(3);
             }
             if (Config.moveBackward) {
-                this.mixer.clipAction(this.player.model.animations[0]).stop()
+                if (this.role === "player") {
+                    this.mixer.clipAction(this.player.model.animations[0]).stop()
+                }
 
                 // this.player.mesh.translateX(-3);
                 this.playerCollision.checkCollision(-3);
