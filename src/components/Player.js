@@ -51,7 +51,7 @@ export default class Player {
                 } else {
                     gltf.scene.scale.set(8, 8, 8)
                     gltf.scene.position.x = this.x * 100
-                    gltf.scene.position.y = 5
+                    gltf.scene.position.y = 70
                     gltf.scene.position.z = this.z * 100
                 }
 

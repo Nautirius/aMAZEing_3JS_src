@@ -11,29 +11,35 @@ import {
     Vector3,
     BoxGeometry
 } from "three";
+import endTex from './assets/textures/block/diamond_ore.png';
 
-export default class SE{
+export default class SE {
 
     constructor(scene, size, height, x, y, z) {
         this.scene = scene;
-        
+
         this.geometry = new BoxGeometry(size, height, size);
         this.material = new MeshPhongMaterial({
-            color: 0xff0000,
-            specular: 0xff0000,
+            color: 0xffffff,
+            specular: 0xffffff,
             shininess: 0,
             // side: DoubleSide,
+            map: new TextureLoader().load(endTex),
         });
-        this.mesh = new Mesh(this.geometry, this.material)
-        // this.mesh.scale.set(size, height, size)
+        this.mesh = new Mesh(this.geometry, this.material);
         this.mesh.translateX(x * size)
         this.mesh.translateY(y)
         this.mesh.translateZ(z * size)
+        this.mesh.castShadow = true;
+        this.material.map.wrapS = RepeatWrapping;
+        this.material.map.wrapT = RepeatWrapping;
+        this.material.map.repeat.set(1, 1);
+        this.mesh.receiveShadow = true;
         this.scene.add(this.mesh);
         this.sent = false
     }
 
-    meta(player, websocket, id){
+    meta(player, websocket, id) {
         let modelBoundingBox = new Box3();
         modelBoundingBox.setFromCenterAndSize(player.mesh.position, new Vector3(20, 100, 20));
 

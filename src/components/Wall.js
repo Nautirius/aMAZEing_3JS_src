@@ -7,7 +7,7 @@ import {
     // MeshStandardMaterial,
     RepeatWrapping
 } from "three";
-import wallTex from './assets/textures/block/diamond_ore.png';
+import wallTex from './assets/textures/block/stone.png';
 
 export default class Wall {
 

@@ -18,13 +18,13 @@ import Stats from 'three/examples/jsm/libs/stats.module.js';
 
 import Renderer from './Renderer';
 import Camera from './Camera';
-import Ico from './Ico';
+// import Ico from './Ico';
 import Wall from './Wall';
 import Floor from './Floor';
 import Player from "./Player";
 import KeyboardPlayer from "./KeyboardPlayer";
 import KeyboardSpectator from "./KeyboardSpectator";
-import PlayerAnimation from "./PlayerAnimation";
+// import PlayerAnimation from "./PlayerAnimation";
 import Config from './Config';
 import Collision from './Collision';
 import SkyBox from './SkyBox';
@@ -56,10 +56,10 @@ export default class Main {
 
 
 
-            var axes = new AxesHelper(1000);
+            var axes = new AxesHelper(10000);
             this.scene.add(axes);
-            const gridHelper = new GridHelper(100, 10);
-            this.scene.add(gridHelper);
+            // const gridHelper = new GridHelper(100, 10);
+            // this.scene.add(gridHelper);
 
 
 
@@ -76,7 +76,6 @@ export default class Main {
 
             // this.ico = new Ico();
             // this.scene.add(this.ico);
-            new Floor(this.scene, 1000, -50)
 
             this.player = null
 
@@ -111,25 +110,29 @@ export default class Main {
                     this.playerId = result.playerId;
                     this.socket.send(JSON.stringify({ action: "set id", playerId: this.playerId }))
 
+
+                    this.levelSize = result.levelData.size;
+
+                    this.floor = new Floor(this.scene, this.levelSize * 100, -50);
+
                     // this.start = new SE(this.scene, 100, 100, result.levelData.start.x, result.levelData.start.y, result.levelData.start.z)
-                    this.end = new SE(this.scene, 100, 100, result.levelData.end.x, result.levelData.end.y, result.levelData.end.z)
-                    // this.scene.add(new BoxHelper(this.start.mesh))
-                    this.scene.add(new BoxHelper(this.end.mesh))
-                    // // this.end = result.levelData.end
+                    this.end = new SE(this.scene, 100, 100, this.levelSize / 2 - result.levelData.end.x, result.levelData.end.y, this.levelSize / 2 - result.levelData.end.z)
+                    // this.scene.add(new BoxHelper(this.end.mesh))
+
 
                     result.levelData.walls.forEach(wall => {
-                        let newWall = new Wall(this.scene, 100, 100, wall.x, 0, wall.z);
+                        let newWall = new Wall(this.scene, 100, 100, this.levelSize / 2 - wall.x, 0, this.levelSize / 2 - wall.z);
                         this.walls.push(newWall);
                     });
 
                     if (result.playerRole === "spectator") {
-                        const controls = new OrbitControls(this.camera.threeCamera, this.renderer.threeRenderer.domElement);
+                        this.orbitControls = new OrbitControls(this.camera.threeCamera, this.renderer.threeRenderer.domElement);
                         this.role = "spectator";
                     } else {
                         this.role = "player";
                     }
 
-                    this.player = new Player(this.scene, this.manager, result.levelData.start.x, result.levelData.start.z);
+                    this.player = new Player(this.scene, this.manager, this.levelSize / 2 - result.levelData.start.x, this.levelSize / 2 - result.levelData.start.z);
                     this.player.load(this.role);
                     return result;
                 })
@@ -149,11 +152,9 @@ export default class Main {
                 this.isLoaded = true;
                 console.log("MODELS LOADED!!!")
 
+
+
                 this.playerCollision = new Collision(this.player, this.walls)
-
-
-                // this.playerAnimation = new PlayerAnimation(this.player.model)
-                // console.log(this.playerAnimation)
 
                 this.mixer = new AnimationMixer(this.player.mesh)
 
@@ -173,8 +174,10 @@ export default class Main {
                         this.socket.send(JSON.stringify({ action: "update position", data: { pos: this.player.mesh.position, rot: this.player.mesh.rotation }, playerId: this.playerId }));
                     }, 1000);
                 } else {
+                    // this.camera.threeCamera.position.set(this.player.mesh.position.x, 1000, this.player.mesh.position.z);
+                    // this.orbitControls.target = this.player.mesh.position;
+                    // this.camera.threeCamera.lookAt(this.player.mesh.position);
                     this.keyboard = new KeyboardSpectator(window, this.playerAnimation, this.player.mesh, this.socket);
-                    // let ok = 1
                 }
 
                 // this.helper = new BoxHelper(this.model.mesh);
@@ -191,7 +194,6 @@ export default class Main {
 
     render() {
         this.stats.begin()
-        // this.ico.update()
 
         // var delta = this.clock.getDelta();
         // if (this.playerAnimation) this.playerAnimation.update(delta)
@@ -227,14 +229,6 @@ export default class Main {
                 this.playerCollision.checkCollision(-3);
             }
 
-            // this.player.mesh.rotation
-
-            // this.lightTarget.position.set(this.model.mesh.position)
-            // // this.lightTarget.translateZ(100);
-
-            // this.light.target = this.lightTarget
-
-
             if (this.role === "player") {
 
                 const camVect = new Vector3(0, 30, -30)
@@ -247,9 +241,6 @@ export default class Main {
                 this.camera.threeCamera.position.z = camPos.z
                 this.camera.threeCamera.lookAt(poss)
             }
-
-
-            // this.lightTarget.position.set(this.model.mesh.getWorldDirection)
         }
 
 

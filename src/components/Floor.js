@@ -8,7 +8,8 @@ import {
     PlaneGeometry,
     RepeatWrapping
 } from "three";
-import floorTex from './assets/textures/floor1.jpg';
+// import floorTex from './assets/textures/floor1.jpg';
+import floorTex from './assets/textures/block/oak_planks.png';
 
 export default class Floor {
 
@@ -25,7 +26,7 @@ export default class Floor {
         });
         this.material.map.wrapS = RepeatWrapping;
         this.material.map.wrapT = RepeatWrapping;
-        this.material.map.repeat.set(10, 10);
+        this.material.map.repeat.set(100, 100);
         this.mesh = new Mesh(this.geometry, this.material);
         this.mesh.rotation.x = - Math.PI / 2;
         this.mesh.position.y = y;
