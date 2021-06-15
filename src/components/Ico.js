@@ -14,5 +14,4 @@ export default class Ico extends Mesh {
     update() {
         this.rotation.y += 0.1
     }
-
 }

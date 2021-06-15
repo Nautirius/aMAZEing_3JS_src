@@ -21,6 +21,7 @@ import Camera from './Camera';
 // import Ico from './Ico';
 import Wall from './Wall';
 import Floor from './Floor';
+import FloorTile from './FloorTile';
 import Player from "./Player";
 import KeyboardPlayer from "./KeyboardPlayer";
 import KeyboardSpectator from "./KeyboardSpectator";
@@ -61,8 +62,6 @@ export default class Main {
             // const gridHelper = new GridHelper(100, 10);
             // this.scene.add(gridHelper);
 
-
-
             this.skybox = new SkyBox(this.scene, this.renderer);
 
             // światło ogólne
@@ -84,7 +83,6 @@ export default class Main {
                 if (event.data[0] == "{") {
                     let data = JSON.parse(event.data);
                     if (data.action === "end") {
-                        console.log("jaja")
                         document.body.innerText = ""
                         document.location.href = 'http://localhost:3000/endPrint'
                     }
@@ -93,8 +91,6 @@ export default class Main {
 
 
             this.walls = [];
-
-
 
             this.gameData = fetch('http://localhost:3000/loadLevel', {
                 method: "POST",
@@ -110,18 +106,24 @@ export default class Main {
                     this.playerId = result.playerId;
                     this.socket.send(JSON.stringify({ action: "set id", playerId: this.playerId }))
 
+                    this.levelTheme = result.theme;
+
+                    console.log(this.levelTheme)
+
 
                     this.levelSize = result.levelData.size;
 
-                    this.floor = new Floor(this.scene, this.levelSize * 100, -50);
+                    // this.floor = new Floor(this.scene, (this.levelSize + 1) * 100, -50);
 
                     // this.start = new SE(this.scene, 100, 100, result.levelData.start.x, result.levelData.start.y, result.levelData.start.z)
-                    this.end = new SE(this.scene, 100, 100, this.levelSize / 2 - result.levelData.end.x, result.levelData.end.y, this.levelSize / 2 - result.levelData.end.z)
-                    // this.scene.add(new BoxHelper(this.end.mesh))
+                    this.end = new SE(this.scene, 100, 100, this.levelSize / 2 - result.levelData.end.x, result.levelData.end.y, this.levelSize / 2 - result.levelData.end.z, this.levelTheme)
 
+                    result.levelData.objects.forEach(tile => {
+                        new FloorTile(this.scene, 100, this.levelSize / 2 - tile.x, -50, this.levelSize / 2 - tile.z, this.levelTheme)
+                    })
 
                     result.levelData.walls.forEach(wall => {
-                        let newWall = new Wall(this.scene, 100, 100, this.levelSize / 2 - wall.x, 0, this.levelSize / 2 - wall.z);
+                        let newWall = new Wall(this.scene, 100, 100, this.levelSize / 2 - wall.x, 0, this.levelSize / 2 - wall.z, this.levelTheme);
                         this.walls.push(newWall);
                     });
 
@@ -152,21 +154,9 @@ export default class Main {
                 this.isLoaded = true;
                 console.log("MODELS LOADED!!!")
 
-
-
                 this.playerCollision = new Collision(this.player, this.walls)
 
                 this.mixer = new AnimationMixer(this.player.mesh)
-
-                // this.player.mesh.animations.forEach( ( clip ) => {
-                //     console.log(clip)
-
-                //     this.mixer.clipAction( clip ).play();
-
-                // } );
-                // this.playerAnimation;
-
-                // this.playerAnimation.playAnim("CINEMA_4D_Main")
 
                 if (this.role === "player") {
                     this.keyboard = new KeyboardPlayer(window, this.playerAnimation, this.player.mesh, this.socket, this.playerId);
@@ -213,16 +203,19 @@ export default class Main {
                 this.player.mesh.rotation.y -= 0.05
             }
             if (Config.moveForward) {
-                console.log(this.player.mesh.animations)
                 if (this.role === "player") {
                     this.mixer.clipAction(this.player.model.animations[0]).play()
                 }
                 // this.player.mesh.translateX(3);
                 this.playerCollision.checkCollision(3);
+            } else {
+                if (this.role === "player") {
+                    this.mixer.clipAction(this.player.model.animations[0]).stop();
+                }
             }
             if (Config.moveBackward) {
                 if (this.role === "player") {
-                    this.mixer.clipAction(this.player.model.animations[0]).stop()
+                    // this.mixer.clipAction(this.player.model.animations[0]).stop()
                 }
 
                 // this.player.mesh.translateX(-3);
@@ -242,7 +235,6 @@ export default class Main {
                 this.camera.threeCamera.lookAt(poss)
             }
         }
-
 
         this.stats.end()
         requestAnimationFrame(this.render.bind(this));

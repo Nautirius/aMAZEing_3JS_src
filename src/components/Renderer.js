@@ -6,13 +6,10 @@ export default class Renderer {
         this.scene = scene;
         this.container = container;
         this.threeRenderer = new WebGLRenderer({ antialias: true });
-        // this.threeRenderer.setClearColor(0xffffff);
         this.threeRenderer.setClearColor(0xfffffff);
         this.threeRenderer.shadowMap.enabled = true;
         this.threeRenderer.shadowMap.type = PCFSoftShadowMap;
-        // this.threeRenderer.setClearColor(0x000000);
         this.container.appendChild(this.threeRenderer.domElement);
-        // this.domElement = this.threeRenderer.domElement;
         this.updateSize();
 
         document.addEventListener('DOMContentLoaded', () => this.updateSize(), false);

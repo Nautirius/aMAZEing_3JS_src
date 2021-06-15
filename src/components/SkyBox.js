@@ -13,7 +13,6 @@ export default class SkyBox {
 
         const loader = new TextureLoader();
         const texture = loader.load(
-            // 'https://threejsfundamentals.org/threejs/resources/images/equirectangularmaps/tears_of_steel_bridge_2k.jpg',
             skyboxTex,
             () => {
                 const rt = new WebGLCubeRenderTarget(texture.image.height);

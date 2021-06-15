@@ -34,7 +34,7 @@ export default class KeyboardSpectator {
             if (dataJson.action === "update position") {
                 let newPos = dataJson.data.pos;
                 let newRot = dataJson.data.rot;
-                this.modelMesh.position.set(newPos.x, 70, newPos.z);
+                this.modelMesh.position.set(newPos.x, 45, newPos.z);
                 this.modelMesh.rotation.set(newRot._x, newRot._y, newRot._z);
                 // this.modelMesh.rotateX(newRot.x)
                 // this.modelMesh.rotateZ(newRot.z)
