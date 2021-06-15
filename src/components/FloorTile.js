@@ -11,7 +11,7 @@ import {
 import libraryTex from './assets/textures/block/stone_bricks.png';
 import stoneTex from './assets/textures/block/stone.png';
 import redstoneTex from './assets/textures/block/piston_top.png';
-import aetherTex from './assets/textures/block/quartz_block_top.png';
+import aetherTex from './assets/textures/block/cyan_concrete_powder.png';
 import netherTex from './assets/textures/block/netherrack.png';
 import endTex from './assets/textures/block/end_stone.png';
 
