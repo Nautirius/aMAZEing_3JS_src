@@ -76,7 +76,7 @@ export default class SE {
 
         if (modelBoundingBox.intersectsBox(objectBoundingBox) && !this.sent) {
             this.sent = true
-            websocket.send(JSON.stringify({ "action": "end", "playerId": id }))
+            websocket.send(JSON.stringify({ "action": "end", "playerId": id, "win":true }))
         }
     }
 }

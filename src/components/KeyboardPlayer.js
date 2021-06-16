@@ -5,6 +5,8 @@ const KEYS = {
     "up": 38,
     "right": 39,
     "down": 40,
+    "esc": 27,
+    "delete": 8,
 };
 
 export default class KeyboardPlayer {
@@ -67,6 +69,14 @@ export default class KeyboardPlayer {
                 if (!Config.moveBackward) {
                     this.socket.send(JSON.stringify({ action: "set move", data: event.keyCode, playerId: this.playerId }));
                     Config.moveBackward = true;
+                    // this.animation.playAnim("crwalk");
+                }
+                break;
+            case KEYS.esc:
+            case KEYS.delete:
+                if (!Config.surrender) {
+                    this.socket.send(JSON.stringify({ "action": "end", "playerId": this.playerId, "win":false }))
+                    Config.surrender = true;
                     // this.animation.playAnim("crwalk");
                 }
                 break;
