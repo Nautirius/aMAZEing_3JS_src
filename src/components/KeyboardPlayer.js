@@ -32,7 +32,6 @@ export default class KeyboardPlayer {
             case KEYS.up:
             case KEYS.w:
                 Config.moveForward = false;
-                // this.animation.playAnim("stand");
                 break;
             case KEYS.left:
             case KEYS.a:
@@ -45,11 +44,9 @@ export default class KeyboardPlayer {
             case KEYS.down:
             case KEYS.s:
                 Config.moveBackward = false;
-                // this.animation.playAnim("stand");
                 break;
         }
         if(!Config.end){this.socket.send(JSON.stringify({ action: "del move", data: event.keyCode, playerId: this.playerId }));}
-        console.log('onKeyChange', event.keyCode)
     }
 
     onKeyDown(event) {
@@ -81,7 +78,6 @@ export default class KeyboardPlayer {
                 if (!Config.moveBackward) {
                     if(!Config.end){this.socket.send(JSON.stringify({ action: "set move", data: event.keyCode, playerId: this.playerId }));}
                     Config.moveBackward = true;
-                    // this.animation.playAnim("crwalk");
                 }
                 break;
             case KEYS.esc:
@@ -89,7 +85,6 @@ export default class KeyboardPlayer {
                 if (!Config.surrender) {
                     if(!Config.end){this.socket.send(JSON.stringify({ "action": "end", "playerId": this.playerId, "win":false }))}
                     Config.surrender = true;
-                    // this.animation.playAnim("crwalk");
                 }
                 break;
         }

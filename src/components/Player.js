@@ -1,4 +1,3 @@
-// import { Mesh, TextureLoader, MeshPhongMaterial, SpotLight, Box3, Object3D, Vector3 } from "three";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import model from './assets/models/rifle/scene.gltf'
 import model2 from './assets/models/steve/scene.gltf'
@@ -20,7 +19,6 @@ export default class Player {
         this.loader.load(
             this.model,
             (gltf) => {
-                console.log('success')
                 if (role === "player") {
                     gltf.scene.scale.set(0.2, 0.2, 0.2)
                     gltf.scene.position.x = this.x * 100
@@ -33,17 +31,13 @@ export default class Player {
                     gltf.scene.position.z = this.z * 100
                 }
 
-                // gltf.scene.rotateY(Math.PI / 2)
                 this.mesh = gltf.scene
                 this.model = gltf
 
 
                 this.scene.add(this.mesh)
-                // console.log(gltf.animations)
             },
             (progress) => {
-                console.log('progress')
-                // console.log(progress)
             },
             (error) => {
                 console.log(error)

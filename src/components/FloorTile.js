@@ -1,10 +1,7 @@
 import {
     Mesh,
-    DoubleSide,
     TextureLoader,
-    // BoxGeometry,
     MeshPhongMaterial,
-    // MeshStandardMaterial,
     PlaneGeometry,
     RepeatWrapping
 } from "three";
@@ -18,7 +15,6 @@ import endTex from './assets/textures/block/end_stone.png';
 export default class Floor {
 
     constructor(scene, size, x, y, z, theme) {
-        console.log("floor")
         this.scene = scene;
         switch (theme) {
             case "library":
@@ -48,7 +44,6 @@ export default class Floor {
             color: 0xffffff,
             specular: 0xffffff,
             shininess: 0,
-            // side: DoubleSide,
             map: new TextureLoader().load(this.floorTex),
         });
         this.material.map.wrapS = RepeatWrapping;
@@ -59,7 +54,6 @@ export default class Floor {
         this.mesh.position.x = x * size;
         this.mesh.position.y = y;
         this.mesh.position.z = z * size;
-        // this.mesh.receiveShadow = true;
         this.scene.add(this.mesh)
     }
 }

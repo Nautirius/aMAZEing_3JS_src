@@ -1,12 +1,8 @@
 import {
     Mesh,
-    DoubleSide,
     TextureLoader,
-    BoxHelper,
     MeshPhongMaterial,
-    // MeshStandardMaterial,
     RepeatWrapping,
-    Object3D,
     Box3,
     Vector3,
     BoxGeometry
@@ -52,7 +48,6 @@ export default class SE {
             color: 0xffffff,
             specular: 0xffffff,
             shininess: 0,
-            // side: DoubleSide,
             map: new TextureLoader().load(this.endTex),
         });
         this.mesh = new Mesh(this.geometry, this.material);

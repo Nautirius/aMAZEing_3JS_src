@@ -1,31 +1,21 @@
 import {
-    PerspectiveCamera,
     Vector3,
     Scene,
-    AxesHelper,
-    GridHelper,
     HemisphereLight,
-    PointLight,
     LoadingManager,
-    TextureLoader,
     Clock,
-    BoxHelper,
-    Box3,
-    AnimationMixer
+    AnimationMixer,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 
 import Renderer from './Renderer';
 import Camera from './Camera';
-// import Ico from './Ico';
 import Wall from './Wall';
-import Floor from './Floor';
 import FloorTile from './FloorTile';
 import Player from "./Player";
 import KeyboardPlayer from "./KeyboardPlayer";
 import KeyboardSpectator from "./KeyboardSpectator";
-// import PlayerAnimation from "./PlayerAnimation";
 import Config from './Config';
 import Collision from './Collision';
 import SkyBox from './SkyBox';
@@ -55,31 +45,15 @@ export default class Main {
 
             this.manager = new LoadingManager();
 
-
-
-            var axes = new AxesHelper(10000);
-            this.scene.add(axes);
-            // const gridHelper = new GridHelper(100, 10);
-            // this.scene.add(gridHelper);
-
             this.skybox = new SkyBox(this.scene, this.renderer);
 
-            // światło ogólne
-            // let light = new PointLight(0xffffff, 0.2, 10000, 1000);
-            // light.castShadow = true;
-            // light.position.set(0, 1000, 0);
-            // this.scene.add(light);
             let mainLight = new HemisphereLight(0xffffff, 0x444444, 1);
             mainLight.position.set(0, 0, 0);
             this.scene.add(mainLight);
 
-            // this.ico = new Ico();
-            // this.scene.add(this.ico);
-
             this.player = null
 
             this.socket.addEventListener('message', event => {
-                console.log('Message from server ', event.data);
                 if (event.data[0] == "{") {
                     let data = JSON.parse(event.data);
                     if (data.action === "end") {
@@ -101,21 +75,14 @@ export default class Main {
             })
                 .then(res => res.json())
                 .then(result => {
-                    console.log(result)
 
                     this.playerId = result.playerId;
                     this.socket.send(JSON.stringify({ action: "set id", playerId: this.playerId }))
 
                     this.levelTheme = result.theme;
 
-                    console.log(this.levelTheme)
-
-
                     this.levelSize = result.levelData.size;
 
-                    // this.floor = new Floor(this.scene, (this.levelSize + 1) * 100, -50);
-
-                    // this.start = new SE(this.scene, 100, 100, result.levelData.start.x, result.levelData.start.y, result.levelData.start.z)
                     this.end = new SE(this.scene, 100, 100, this.levelSize / 2 - result.levelData.end.x, result.levelData.end.y, this.levelSize / 2 - result.levelData.end.z, this.levelTheme)
 
                     result.levelData.objects.forEach(tile => {
@@ -143,8 +110,7 @@ export default class Main {
 
 
             this.manager.onProgress = (item, loaded, total) => {
-                document.getElementById("loaded").innerText = `loaded ${loaded}/${total}`
-                console.log(`progress ${item}: ${loaded} ${total}`);
+                document.getElementById("loaded").innerText = `loading... ${loaded}/${total}`
             };
 
             this.manager.onLoad = () => {
@@ -153,7 +119,6 @@ export default class Main {
                 setTimeout(function () { loadingScreen.style.opacity = 0; loadingScreen.style.zIndex = -2; }, 500);
 
                 this.isLoaded = true;
-                console.log("MODELS LOADED!!!")
 
                 this.playerCollision = new Collision(this.player, this.walls)
 
@@ -165,14 +130,8 @@ export default class Main {
                         if(!Config.end){this.socket.send(JSON.stringify({ action: "update position", data: { pos: this.player.mesh.position, rot: this.player.mesh.rotation }, playerId: this.playerId }));}
                     }, 1000);
                 } else {
-                    // this.camera.threeCamera.position.set(this.player.mesh.position.x, 1000, this.player.mesh.position.z);
-                    // this.orbitControls.target = this.player.mesh.position;
-                    // this.camera.threeCamera.lookAt(this.player.mesh.position);
                     this.keyboard = new KeyboardSpectator(window, this.playerAnimation, this.player.mesh, this.socket);
                 }
-
-                // this.helper = new BoxHelper(this.model.mesh);
-                // this.scene.add(this.helper)
             };
 
 

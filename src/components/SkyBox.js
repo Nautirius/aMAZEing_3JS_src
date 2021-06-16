@@ -7,7 +7,6 @@ import skyboxTex from './assets/textures/warszawa.jpg';
 export default class SkyBox {
 
     constructor(scene, renderer) {
-        console.log("floor")
         this.scene = scene;
         this.renderer = renderer;
 

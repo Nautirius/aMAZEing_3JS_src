@@ -21,7 +21,6 @@ export default class KeyboardSpectator {
 
         // events
         this.socket.addEventListener('message', event => {
-            console.log('Message from server ', event.data);
             let data = JSON.parse(event.data);
             if (data.action === "del move") {
                 this.onKeyUp(data)
@@ -61,7 +60,6 @@ export default class KeyboardSpectator {
                 Config.moveBackward = false;
                 break;
         }
-        console.log('onKeyUp', event.data)
     }
 
     onKeyDown(event) {
@@ -83,6 +81,5 @@ export default class KeyboardSpectator {
                 Config.moveBackward = true;
                 break;
         }
-        console.log('onKeyDown', event.data)
     }
 }
