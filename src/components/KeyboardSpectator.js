@@ -1,4 +1,3 @@
-// import PlayerAnimation from "./PlayerAnimation"
 import Config from "./Config";
 
 const KEYS = {
@@ -6,6 +5,10 @@ const KEYS = {
     "up": 38,
     "right": 39,
     "down": 40,
+    "w": 87,
+    "a": 65,
+    "s": 83,
+    "d": 68,
 };
 
 export default class KeyboardSpectator {
@@ -26,8 +29,6 @@ export default class KeyboardSpectator {
                 this.onKeyDown(data)
             }
         }, false);
-        // this.domElement.addEventListener('keydown', event => this.onKeyDown(event), false);
-        // this.domElement.addEventListener('keyup', event => this.onKeyUp(event), false);
 
         this.socket.addEventListener('message', (event) => {
             let dataJson = JSON.parse(event.data);
@@ -36,8 +37,6 @@ export default class KeyboardSpectator {
                 let newRot = dataJson.data.rot;
                 this.modelMesh.position.set(newPos.x, 45, newPos.z);
                 this.modelMesh.rotation.set(newRot._x, newRot._y, newRot._z);
-                // this.modelMesh.rotateX(newRot.x)
-                // this.modelMesh.rotateZ(newRot.z)
             }
         })
     }
@@ -46,18 +45,20 @@ export default class KeyboardSpectator {
     onKeyUp(event) {
         switch (event.data) {
             case KEYS.up:
+            case KEYS.w:
                 Config.moveForward = false;
-                // this.animation.playAnim("stand");
                 break;
             case KEYS.left:
+            case KEYS.a:
                 Config.rotateLeft = false;
                 break;
             case KEYS.right:
+            case KEYS.d:
                 Config.rotateRight = false;
                 break;
             case KEYS.down:
+            case KEYS.s:
                 Config.moveBackward = false;
-                // this.animation.playAnim("stand");
                 break;
         }
         console.log('onKeyUp', event.data)
@@ -66,18 +67,20 @@ export default class KeyboardSpectator {
     onKeyDown(event) {
         switch (event.data) {
             case KEYS.up:
+            case KEYS.w:
                 Config.moveForward = true;
-                // this.animation.playAnim("crwalk");
                 break;
             case KEYS.left:
+            case KEYS.a:
                 Config.rotateLeft = true;
                 break;
             case KEYS.right:
+            case KEYS.d:
                 Config.rotateRight = true;
                 break;
             case KEYS.down:
+            case KEYS.s:
                 Config.moveBackward = true;
-                // this.animation.playAnim("crwalk");
                 break;
         }
         console.log('onKeyDown', event.data)

@@ -7,6 +7,10 @@ const KEYS = {
     "down": 40,
     "esc": 27,
     "delete": 8,
+    "w": 87,
+    "a": 65,
+    "s": 83,
+    "d": 68,
 };
 
 export default class KeyboardPlayer {
@@ -26,16 +30,20 @@ export default class KeyboardPlayer {
     onKeyUp(event) {
         switch (event.keyCode) {
             case KEYS.up:
+            case KEYS.w:
                 Config.moveForward = false;
                 // this.animation.playAnim("stand");
                 break;
             case KEYS.left:
+            case KEYS.a:
                 Config.rotateLeft = false;
                 break;
             case KEYS.right:
+            case KEYS.d:
                 Config.rotateRight = false;
                 break;
             case KEYS.down:
+            case KEYS.s:
                 Config.moveBackward = false;
                 // this.animation.playAnim("stand");
                 break;
@@ -47,6 +55,7 @@ export default class KeyboardPlayer {
     onKeyDown(event) {
         switch (event.keyCode) {
             case KEYS.up:
+            case KEYS.w:
                 if (!Config.moveForward) {
                     this.socket.send(JSON.stringify({ action: "set move", data: event.keyCode, playerId: this.playerId }));
                     Config.moveForward = true;
@@ -54,18 +63,21 @@ export default class KeyboardPlayer {
                 }
                 break;
             case KEYS.left:
+            case KEYS.a:
                 if (!Config.rotateLeft) {
                     this.socket.send(JSON.stringify({ action: "set move", data: event.keyCode, playerId: this.playerId }));
                 }
                 Config.rotateLeft = true;
                 break;
             case KEYS.right:
+            case KEYS.d:
                 if (!Config.rotateRight) {
                     this.socket.send(JSON.stringify({ action: "set move", data: event.keyCode, playerId: this.playerId }));
                 }
                 Config.rotateRight = true;
                 break;
             case KEYS.down:
+            case KEYS.s:
                 if (!Config.moveBackward) {
                     this.socket.send(JSON.stringify({ action: "set move", data: event.keyCode, playerId: this.playerId }));
                     Config.moveBackward = true;

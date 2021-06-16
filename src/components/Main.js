@@ -143,13 +143,14 @@ export default class Main {
 
 
             this.manager.onProgress = (item, loaded, total) => {
+                document.getElementById("loaded").innerText = `loaded ${loaded}/${total}`
                 console.log(`progress ${item}: ${loaded} ${total}`);
             };
 
             this.manager.onLoad = () => {
 
-                // let loadingScreen = document.getElementById("loading-screen");
-                // setTimeout(function () { loadingScreen.style.opacity = 0; loadingScreen.style.zIndex = 0; }, 500);
+                let loadingScreen = document.getElementById("loadingscreen");
+                setTimeout(function () { loadingScreen.style.opacity = 0; loadingScreen.style.zIndex = -2; }, 500);
 
                 this.isLoaded = true;
                 console.log("MODELS LOADED!!!")
