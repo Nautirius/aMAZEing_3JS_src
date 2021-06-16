@@ -4,4 +4,5 @@ export default {
     moveForward: false,
     moveBackward: false,
     surrender: false,
+    end: false,
 }

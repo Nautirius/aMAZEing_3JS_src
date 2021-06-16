@@ -162,7 +162,7 @@ export default class Main {
                 if (this.role === "player") {
                     this.keyboard = new KeyboardPlayer(window, this.playerAnimation, this.player.mesh, this.socket, this.playerId);
                     setInterval(() => {
-                        this.socket.send(JSON.stringify({ action: "update position", data: { pos: this.player.mesh.position, rot: this.player.mesh.rotation }, playerId: this.playerId }));
+                        if(!Config.end){this.socket.send(JSON.stringify({ action: "update position", data: { pos: this.player.mesh.position, rot: this.player.mesh.rotation }, playerId: this.playerId }));}
                     }, 1000);
                 } else {
                     // this.camera.threeCamera.position.set(this.player.mesh.position.x, 1000, this.player.mesh.position.z);
@@ -195,7 +195,7 @@ export default class Main {
         this.renderer.render(this.scene, this.camera.threeCamera);
 
         if (this.isLoaded) {
-            this.end.meta(this.player, this.socket, this.playerId)
+            if(this.role=="player"){this.end.meta(this.player, this.socket, this.playerId)}
 
             if (Config.rotateLeft) {
                 this.player.mesh.rotation.y += 0.05

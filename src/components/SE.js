@@ -17,6 +17,7 @@ import redstoneTex from './assets/textures/block/redstone_block.png';
 import aetherTex from './assets/textures/block/water.jpg';
 import netherTex from './assets/textures/block/ancient_debris_side.png';
 import endTex from './assets/textures/block/bedrock.png';
+import Config from "./Config";
 
 export default class SE {
 
@@ -76,6 +77,7 @@ export default class SE {
 
         if (modelBoundingBox.intersectsBox(objectBoundingBox) && !this.sent) {
             this.sent = true
+            Config.end = true
             websocket.send(JSON.stringify({ "action": "end", "playerId": id, "win":true }))
         }
     }

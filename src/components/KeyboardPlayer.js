@@ -48,7 +48,7 @@ export default class KeyboardPlayer {
                 // this.animation.playAnim("stand");
                 break;
         }
-        this.socket.send(JSON.stringify({ action: "del move", data: event.keyCode, playerId: this.playerId }));
+        if(!Config.end){this.socket.send(JSON.stringify({ action: "del move", data: event.keyCode, playerId: this.playerId }));}
         console.log('onKeyChange', event.keyCode)
     }
 
@@ -57,7 +57,7 @@ export default class KeyboardPlayer {
             case KEYS.up:
             case KEYS.w:
                 if (!Config.moveForward) {
-                    this.socket.send(JSON.stringify({ action: "set move", data: event.keyCode, playerId: this.playerId }));
+                    if(!Config.end){this.socket.send(JSON.stringify({ action: "set move", data: event.keyCode, playerId: this.playerId }));}
                     Config.moveForward = true;
                     // this.animation.playAnim("crwalk");
                 }
@@ -65,21 +65,21 @@ export default class KeyboardPlayer {
             case KEYS.left:
             case KEYS.a:
                 if (!Config.rotateLeft) {
-                    this.socket.send(JSON.stringify({ action: "set move", data: event.keyCode, playerId: this.playerId }));
+                    if(!Config.end){this.socket.send(JSON.stringify({ action: "set move", data: event.keyCode, playerId: this.playerId }));}
                 }
                 Config.rotateLeft = true;
                 break;
             case KEYS.right:
             case KEYS.d:
                 if (!Config.rotateRight) {
-                    this.socket.send(JSON.stringify({ action: "set move", data: event.keyCode, playerId: this.playerId }));
+                    if(!Config.end){this.socket.send(JSON.stringify({ action: "set move", data: event.keyCode, playerId: this.playerId }));}
                 }
                 Config.rotateRight = true;
                 break;
             case KEYS.down:
             case KEYS.s:
                 if (!Config.moveBackward) {
-                    this.socket.send(JSON.stringify({ action: "set move", data: event.keyCode, playerId: this.playerId }));
+                    if(!Config.end){this.socket.send(JSON.stringify({ action: "set move", data: event.keyCode, playerId: this.playerId }));}
                     Config.moveBackward = true;
                     // this.animation.playAnim("crwalk");
                 }
@@ -87,7 +87,7 @@ export default class KeyboardPlayer {
             case KEYS.esc:
             case KEYS.delete:
                 if (!Config.surrender) {
-                    this.socket.send(JSON.stringify({ "action": "end", "playerId": this.playerId, "win":false }))
+                    if(!Config.end){this.socket.send(JSON.stringify({ "action": "end", "playerId": this.playerId, "win":false }))}
                     Config.surrender = true;
                     // this.animation.playAnim("crwalk");
                 }
